@@ -1,0 +1,43 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>name</title>
+</head>
+<body>
+	<h1>WELCOME TO GAME WORLD</h1>
+	<h3>By<br>SK </h3>
+	<button onclick="fun1()" id="b1">old player</button>
+	<button onclick="fun2()" id="b1">new player</button>
+	<div id="form1" style="display: none;">
+		<form method="POST" action="{% url 'home' %}">
+		{% csrf_token %}
+		<input type="text" name="o1" value="1">
+		<input type="text" name="p1">
+		<input type="text" name="ps1">
+		<input type="submit" name="s1" value="sub1">
+	</form>
+	</div>
+	<div id="form2" style="display: none;">
+		<form method="POST" action="{% url 'home' %}">
+		{% csrf_token %}
+		<input type="text" name="o3" value="2">
+		<input type="text" name="p3">
+		<input type="text" name="ps3">
+		<input type="submit" name="s3" value="sub2">
+	</form>
+	</div>
+	
+	<script type="text/javascript">
+		function fun1(){
+			document.getElementById("form1").style.display = "block";
+			document.getElementById("form2").style.display = "none";
+		}
+		function fun2(){
+			document.getElementById("form2").style.display = "block";
+			document.getElementById("form1").style.display = "none";
+		}
+	</script>
+</body>
+</html> 

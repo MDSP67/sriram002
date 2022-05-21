@@ -1,0 +1,616 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hand Cricket Game</title>
+    <!-- <link rel="stylesheet" href="../css/style.css"> -->
+    <style type="text/css">
+ * {
+     margin: 0;
+     padding: 0;
+     box-sizing: border-box;
+ }
+ 
+ /* Body */
+ body {
+      background-color: #292C34;
+ }
+ 
+ /* Header */
+ header {
+      background: white;
+      padding: 20px;
+ }
+ 
+ header > h1 {
+      color: #24272E;
+      text-align: center;
+      font-family: Asap, sans-serif;
+ }
+ 
+ /* Status Bar */
+ .status {
+      margin: 20px auto;
+      border: 3px solid white;
+      border-radius: 4px;
+      text-align: center;
+      width: 85%;
+      color: white;
+      font-size: 46px;
+      padding: 15px 20px;
+      font-family: Asap, sans-serif;
+      position: relative;
+ }
+ 
+ 
+ #img_bat {
+      position: relative;
+      max-height: 46px;
+      top: 10px;
+      left: -30px;
+ }
+ 
+ #img_ball {
+      position: relative;
+      max-height: 46px;
+      top: 10px;
+      right: -30px;
+ }
+ 
+ /* To Remove bug of relative placement of bat & ball */
+ 
+ /* To Do Scoreboard */
+ 
+ /* Score-Card bar */
+ .score-card {
+      margin: 20px auto;
+      border: 3px solid white;
+      border-radius: 4px;
+      text-align: center;
+      width: 250px;
+      color: white;
+      font-size: 46px;
+      padding: 15px 20px;
+      font-family: Asap, sans-serif;
+      position: relative;
+ }
+ 
+ .card-badge {
+      background: #e25840;
+      color: white;
+      font-size: 14px;
+      padding: 2px 10px;
+      font-family: Asap sans-serif;
+ }
+ 
+ #runs-label {
+      position: absolute;
+      top: 30px;
+      left: -25px;
+ }
+ 
+ #wickets-label {
+      position: absolute;
+      top: 30px;
+      right: -30px;
+ }
+ 
+ 
+ #overs {
+     width: 50%;
+     background: #909090;
+     color: white;
+     font-size: 14px;
+     padding: 2px 10px;
+     font-family: Asap sans-serif;
+     position: absolute;
+     bottom: -24px;
+     right: 0;
+ }
+ 
+ #target {
+      width: 50%;
+      background: #909090;
+      color: white;
+      font-size: 14px;
+      padding: 2px 10px;
+      font-family: Asap sans-serif;
+      position: absolute;
+      bottom: -48px;
+      right: 0;
+      visibility: hidden;
+ }
+ 
+ /* Who played what... and the result of that action */
+ .results {
+      margin-top: 60px;
+      font-size: 40px;
+      color: white;
+      text-align: center;
+ }
+ 
+ #results-disp {
+      margin: 20px;
+      padding: 15px 15px;
+      font-family: Asap, sans-serif;
+      visibility: hidden;
+ }
+ 
+ #result-message {
+      margin: 15px auto;
+      padding: 15px 15px;
+      text-align: center;
+      /* font-weight: bold; */
+      font-family: Asap, sans-serif;
+ }
+ 
+ .action-img {
+      max-height: 80px;
+      max-width: 80px;
+      position: relative;
+      top: 20px;
+ }
+ 
+ 
+ /* Choices for Game Play */
+ .hand {
+      max-height: 60px;
+      max-width: 60px;
+ }
+ 
+ .Choices {
+      margin: 30px 0;
+      text-align: center;
+ }
+ 
+ .choice {
+      border: 4px solid white;
+      border-radius: 50%;
+      margin: 0 12px;
+      padding: 10px;
+      display: inline-block;
+      transition: all 0.3s ease;
+ }
+ 
+ .choice:hover {
+      cursor: pointer;
+      background: #3c404a;
+ }
+ 
+ /* Display "Make Your Move" */
+ #action-message {
+     text-align: center;
+     color: white;
+     font-size: 20px;
+     font-weight: bold;
+     font-family: Asap, sans-serif;
+ }
+    </style>
+</head>
+<body>
+    <!-- HEADER BAR -->
+    <header>
+        <h1>Hand Cricket</h1>
+    </header>
+
+    <!-- STATUS BAR -->
+    <div class="status">
+        <img src="{% static 'games/img/cricket-bat.png' %}" alt="Bat image" id="img_bat">
+        <span class="status-txt" id="p1-name">Player 1</span>
+        <span class="status-txt" id="status_center_text">batting&nbsp&nbsp|&nbsp&nbspbowling</span>
+        <span class="status-txt" id="p2-name">Player 2</span>
+        <img src="{% static 'games/img/cricket-ball.png' %}" alt="Ball image" id="img_ball">
+        <span class="status-txt">twin:{{hs3}}</span><h3 id="ddd"></h3>
+    </div>
+
+    <!-- FULL SCORE BOARD and TARGET RUNS, OVERS(to-do later) or FIRST BAT -->
+    <div class="score-board">
+        <!-- TO DO-->
+    </div>
+    
+    <!-- SCORE CARD (Runs/Wickets) -->
+    <div class="score-card">
+        <div id="runs-label" class="card-badge">runs</div>
+        <div id="wickets-label" class="card-badge">wickets</div>
+        <span id="runs">0</span>/<span id="wickets">0</span>
+        <div class="score-card-footer">
+            <p id="overs">Overs: 0.0</p>
+            <p id="target">Target: Nil</p>
+        </div>
+        
+    </div>
+
+    <!-- Who played what... and the result of that action -->
+    <div class="results">
+        <div id="results-disp">
+            <span class="result-txt" id="p1-name-res">Player 1</span> played
+            <span class="result-img"><img src="{% static 'games/img/hand-with-one-finger.png' %}" alt="" id="p1-action-img" class="action-img"></span>
+            <span class="result-txt"> vs </span>
+            <span class="result-img"><img src="{% static 'games/img/hand-with-one-finger.png' %}" alt="" id="p2-action-img" class="action-img"></span>
+            <span class="result-txt" id="p2-name-res">Player 2</span> played
+        </div>
+        <p id="result-message">The Game Started! Make your first move!</p>
+    </div>
+
+    <!-- Choices for Game Play-->
+    <!-- Row 1 -->
+    <div class="Choices">
+        <div class="choice" id="hand1">
+            <img class="hand" src="{% static 'games/img/hand-with-one-finger.png' %}" alt="1">
+        </div>
+        <div class="choice" id="hand2">
+            <img class="hand" src="{% static 'games/img/hand-with-two-finger.png' %}" alt="2">
+        </div>
+        <div class="choice" id="hand3">
+            <img class="hand" src="{% static 'games/img/hand-with-three-finger.png' %}" alt="3">
+        </div>
+    </div>
+    <!-- Row 2 -->
+    <div class="Choices">
+        <div class="choice" id="hand4">
+            <img class="hand" src="{% static 'games/img/hand-with-four-finger.png' %}" alt="4">
+        </div>
+        <div class="choice" id="hand5">
+            <img class="hand" src="{% static 'games/img/hand-with-five-finger.png' %}" alt="5">
+        </div>
+        <div class="choice" id="hand6">
+            <img class="hand" src="{% static 'games/img/hand-with-thumb-finger.png' %}" alt="6">
+        </div>
+    </div>
+    <!-- Row 3 -->
+    <div class="Choices">
+        <div class="choice" id="hand0">
+            <img class="hand" src="{% static 'games/img/hand-with-zero-finger.png' %}" alt="0">
+        </div>
+    </div>
+
+    <!-- Display "Make Your Move"-->
+    <p id="action-message">make your move.</p>
+
+    <!-- Link JS -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+    <script>
+/* caching the DOM */
+var p1name;    // current batting player
+var p2name;    // current balling player
+const p1name_span = document.getElementById("p1-name");
+const p2name_span = document.getElementById("p2-name");
+const p1name_res = document.getElementById("p1-name-res");
+const p2name_res = document.getElementById("p2-name-res");
+const maxWicket = 10;
+const maxOvers = 50.0;
+var runs = 0;
+var wickets = 0;
+const runs_span = document.getElementById("runs");
+const wickets_span = document.getElementById("wickets");
+var overs = 0.0;
+const overs_p = document.getElementById("overs");
+var target = 0;
+const target_p = document.getElementById("target"); // also contains hide-show style Target
+const results_disp_div = document.getElementById("results-disp"); // hide-show style Result
+var p1_action_img_span = document.getElementById("p1-action-img");
+var p2_action_img_span = document.getElementById("p2-action-img");
+const result_message_p = document.getElementById("result-message");
+const hand0_div = document.getElementById("hand0");
+const hand1_div = document.getElementById("hand1");
+const hand2_div = document.getElementById("hand2");
+const hand3_div = document.getElementById("hand3");
+const hand4_div = document.getElementById("hand4");
+const hand5_div = document.getElementById("hand5");
+const hand6_div = document.getElementById("hand6");
+var inningsCount = 1;
+var over1;
+var twin={{hs3}}; 
+var f = [{% for a in f1 %}{{a.hs4}},{% endfor %}];
+f.sort();
+var x=0;
+// console.log(f);
+var d = document.querySelector("#ddd");
+for(let i=0;i<f.length-1;i++){
+    if(f[i] > hiscoreval){
+        x = f[i];
+        break;
+    }
+}
+d.innerHTML = x;
+
+
+
+function startFirstInnings() {
+    alert("Game On!\nAll the best to both the teams.");
+    // var name1 = prompt("enter the player name ");
+    over1 =parseInt(prompt("how many overs "));
+    target = 0;
+    target_p.style.visibility = "hidden";
+
+    runs = 0;
+    wickets = 0;
+    overs = 0.0;
+    
+    p1name = {{p1}};
+    p2name = "Computer";
+    p1name_span.innerHTML = p1name;
+    p2name_span.innerHTML = p2name;
+    result_message_p.innerHTML = "The Game Started! Make your first move!";
+}
+
+function startSecondInnings() {
+    alert("End of First innings\nswap sides and get ready\nSecond innings begins!");
+
+    target = runs + 1;
+    target_p.style.visibility = "visible";
+    target_p.innerHTML = "Target: "+target;
+
+    runs = 0;
+    wickets = 0;
+    overs = 0.0;    
+
+    /* swap players */
+    let temp = p1name;
+    p1name = p2name;
+    p2name = temp;
+
+    /* swap player hands */
+    p1_action_img_span = document.getElementById("p2-action-img");
+    p2_action_img_span = document.getElementById("p1-action-img");
+
+    p1name_span.innerHTML = p1name;
+    p2name_span.innerHTML = p2name;
+    result_message_p.innerHTML = "End of first innings, Second innings starts with a Target of "+target+" runs";
+}
+
+function gameOver() {
+    alert("Game Over!");
+
+    results_disp_div.style.visibility = "hidden";
+    if(runs >= target) {
+        // remember? names swapped!
+        result_message_p.innerHTML = p1name+" Won the match!!";
+        twin++;
+        $.ajax({
+                type:"GET",
+                url: "/handc",
+                data:{
+                     hs4 : twin
+                },
+                success: "ok"
+            })
+    }
+    else {
+        result_message_p.innerHTML = p2name+" Won the match!!";
+    }
+
+    var elements = document.getElementsByClassName("Choices");
+
+    for (var i = 0; i < elements.length; i++) {
+        elements[i].style.visibility = "hidden"; //elements[i].style.display = "none"; 
+    }
+    /* To some other page */
+
+    document.getElementById("action-message").style.visibility = "hidden";
+    document.getElementById("action-message").style.cursor = "none";
+}
+
+function getComputerChoice() {
+    return Math.floor(Math.random()*7);
+}
+
+function incrementOverCount() {
+    let noOfBalls = (overs - Math.floor(overs)).toFixed(1)*10;
+    if(noOfBalls==5){
+        overs = Math.ceil(overs)
+    }
+    else {
+        overs = overs + 0.1;
+    }
+
+    overs_p.innerHTML = "Overs: "+overs.toFixed(1); 
+}
+
+function updateActionResults(p1choice,p2choice){
+    results_disp_div.style.visibility = "visible";
+    p1name_res.innerHTML = p1name;
+    p2name_res.innerHTML = p2name;
+
+    switch(p1choice) {
+        case 0:
+            p1_action_img_span.src = "{% static 'games/img/hand-with-zero-finger.png' %}";
+        break;
+        case 1:
+            p1_action_img_span.src = "{% static 'games/img/hand-with-one-finger.png' %}";
+        break;
+        case 2:
+            p1_action_img_span.src = "{% static 'games/img/hand-with-two-finger.png' %}";
+        break;
+        case 3:
+            p1_action_img_span.src = "{% static 'games/img/hand-with-three-finger.png' %}";
+        break;
+        case 4:
+            p1_action_img_span.src = "{% static 'games/img/hand-with-four-finger.png' %}";
+        break;
+        case 5:
+            p1_action_img_span.src = "{% static 'games/img/hand-with-five-finger.png' %}";
+        break;
+        case 6:
+            p1_action_img_span.src = "{% static 'games/img/hand-with-thumb-finger.png' %}";
+        break;
+    }
+    switch(p2choice) {
+        case 0:
+            p2_action_img_span.src = "{% static 'games/img/hand-with-zero-finger.png' %}";
+        break;
+        case 1:
+            p2_action_img_span.src = "{% static 'games/img/hand-with-one-finger.png' %}";
+        break;
+        case 2:
+            p2_action_img_span.src = "{% static 'games/img/hand-with-two-finger.png' %}";
+        break;
+        case 3:
+            p2_action_img_span.src = "{% static 'games/img/hand-with-three-finger.png' %}";
+        break;
+        case 4:
+            p2_action_img_span.src = "{% static 'games/img/hand-with-four-finger.png' %}";
+        break;
+        case 5:
+            p2_action_img_span.src = "{% static 'games/img/hand-with-five-finger.png' %}";
+        break;
+        case 6:
+            p2_action_img_span.src = "{% static 'games/img/hand-with-thumb-finger.png' %}";
+        break;
+    }
+}
+
+function printRuns(run,batsman) {
+    switch(run) {
+        case 0:
+            result_message_p.innerHTML = "a successful defence by "+batsman;
+        break;
+        case 1:
+            result_message_p.innerHTML = "gets one run";
+        break;
+        case 2:
+            result_message_p.innerHTML = "two runs gained";
+        break;
+        case 3:
+            result_message_p.innerHTML = "three runs! good running between the wickets";
+        break;
+        case 4:
+            result_message_p.innerHTML = "boundary!! four runs!!! 🔥";
+        break;
+        case 5:
+            result_message_p.innerHTML = "omg... are they Flash!? gets five runs!!";
+        break;
+        case 6:
+            result_message_p.innerHTML = "and the ball goes beyond! what a sixer! 🔥🔥🔥";
+        break;
+    }
+}
+
+function checkGameFlow() {
+    /* game flow */   
+    console.log(over1);
+    console.log(overs); 
+    if(overs >= over1){
+        if(inningsCount===1 || wickets === maxWicket ) {
+            startSecondInnings();
+            inningsCount++;
+        }
+        if(inningsCount===2 && runs >= target ){
+             gameOver();
+    }
+    }
+    if (inningsCount === 2 && overs >= over1){
+        gameOver();
+    }
+    if(inningsCount===1 && wickets === maxWicket ) {
+        startSecondInnings();
+        inningsCount++;
+    }
+    else if(inningsCount===2 && wickets === maxWicket || inningsCount===2 && runs >= target ) {
+        gameOver();
+    }
+    else {
+        //startFirstInnings();
+    }
+}
+
+function gotOut(p1choice) {
+    console.log("OUT!!");
+    wickets++;
+    runs_span.innerHTML = runs;
+    wickets_span.innerHTML = wickets;
+    result_message_p.innerHTML = "OUT!!  "+p1name+" looses a wicket 😢"
+
+    checkGameFlow();
+}
+
+function scoredRun(p1choice, p2choice) {
+    
+    if(inningsCount===1) {
+        
+        if(p1choice===0){
+            console.log("Scored "+p2choice+" runs!!");
+            runs = runs + p2choice;
+        }
+        else {
+            console.log("Scored "+p1choice+" runs!!");
+            runs = runs + p1choice;
+        }
+        printRuns(p1choice,p1name);
+    }
+    else {
+        
+        if(p2choice===0){
+            console.log("Scored "+p1choice+" runs!!");
+            runs = runs + p1choice;
+        }
+        else {
+            console.log("Scored "+p2choice+" runs!!");
+            runs = runs + p2choice;
+        }
+        printRuns(p2choice,p1name);
+    }
+    runs_span.innerHTML = runs;
+    wickets_span.innerHTML = wickets;
+    
+
+    checkGameFlow();
+}
+
+function game(p1choice) {
+    let p2choice = getComputerChoice()
+    //const p2choice = getP2Choice() // over the internet
+
+    console.log(p1name+" choice = "+p1choice);
+    console.log(p2name+" choice = "+p2choice);
+
+    incrementOverCount();
+    updateActionResults(p1choice,p2choice);
+    if(p1choice === p2choice) {
+        // Out!
+        gotOut(p1choice);
+    }
+    else {
+        // Score!
+        scoredRun(p1choice,p2choice);
+    }
+    console.log(runs+"/"+wickets);
+    console.log();
+}
+
+function main() {
+
+    hand0_div.addEventListener('click', function(){
+        game(0);
+    })
+    hand1_div.addEventListener('click', function(){
+        game(1);
+    })
+    hand2_div.addEventListener('click', function(){
+        game(2);
+    })
+    hand3_div.addEventListener('click', function(){
+        game(3);
+    })
+    hand4_div.addEventListener('click', function(){
+        game(4);
+    })
+    hand5_div.addEventListener('click', function(){
+        game(5);
+    })
+    hand6_div.addEventListener('click', function(){
+        game(6);
+    })
+
+    startFirstInnings();
+}
+
+main();
+
+
+    </script>
+    
+</body>
+</html>

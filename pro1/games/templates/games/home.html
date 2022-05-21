@@ -1,0 +1,18 @@
+{% load static%}
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>home</title>
+</head>
+<body>
+	<h1>WELCOME TO GAME WORLD</h1>
+	<h3>By<br>SK </h3><br>
+	<h1>{{p1}}</h1>
+	<button onclick="location.href='{% url 'snake' %}'">snake game</button>
+	<button onclick="location.href='{% url 'car' %}'">car game</button>
+	<button onclick="location.href='{% url 'ttt' %}'">tic tac tic game</button>
+	<button onclick="location.href='{% url 'flyingb' %}'">flying bird game</button>
+	<button onclick="location.href='{% url 'handc' %}'">hand's cricket game</button>
+</body>
+</html>
